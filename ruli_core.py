@@ -50,14 +50,13 @@ def comment_pages(article_html, article_url,
         page2yield = lambda page_dict:page_dict['view'])
     )
 
-#li = article_id_list(list_stem('ps',300421), 3))
+'''
+print(article_id_list(list_stem('ps',300421), 3))
+print(len(article_id_list(list_stem('ps',300421), 3)))
 
-#print(article_id_list(list_stem('ps',300421), 3))
-#print(len(article_id_list(list_stem('ps',300421), 3)))
-
-#html,url = article_html_url('ps', 300421, 30828285)
-#print(html,url)
-
+html,url = article_html_url('ps', 300421, 30828285)
+print(html,url)
+'''
 
 html,url = article_html_url('hobby', 300143, 39599965)
 li = comment_pages(html, url, 300143, 39599965)

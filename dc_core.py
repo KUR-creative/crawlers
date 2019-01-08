@@ -47,24 +47,6 @@ def comment_pages(article_html, article_url, gall_id, article_no):
     )
 
 
-    '''
-    def comment_dict_seq(headers, data):
-        cmt_page = 1
-        while True:
-            data['comment_page'] = str(cmt_page)
-            resp = requests.post(DC_COMMENT_STEM, 
-                                 headers=headers, data=data)
-            resp.raise_for_status() 
-            comment_dict = resp.json()
-            if comment_dict['comments']:
-                cmt_page += 1
-                yield comment_dict 
-            else:
-                break
-    return list(comment_dict_seq(headers, data))
-    '''
-
-
 '''
 article_no_li = article_no_list('programming', 1)
 print(article_no_li, type(article_no_li[0]))
