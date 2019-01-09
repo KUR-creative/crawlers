@@ -1,0 +1,23 @@
+xxx_core.py functions
+
+article_no_list(board-info) => article-no-list
+    게시판 정보를 받고 글 목록에서 글 번호의 목록을 반환
+
+article_html_url(board-name, article-no) => (article-html,article-url)
+    글 정보를 받고 글의 html, url을 반환
+
+comment_pages(article-info) => all-comments
+    글 정보를 받고 글의 모든 댓글들을 반환
+    all-comments의 형식은 다양함(지금은)
+        dc_core: list<json>
+      ruli_core: list<html>
+      ppom_core: list<html>
+    instiz_core: (not this function)
+       mlb_core: (not this function)
+
+mlb, instiz는 댓글을 받는 함수가 따로 작성됨.
+
+
+TODO
+
+Refactor GET/POST comments functions in base.py
