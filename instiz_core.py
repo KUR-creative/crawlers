@@ -16,7 +16,6 @@ def article_no_list(board_name, page_no, category):
              cfilter(lambda x:x is not None),
              cmap(lambda a:a.text),
              list)
-             #lambda x:x)
     )
 
 def article_html_url(board_name, article_no):

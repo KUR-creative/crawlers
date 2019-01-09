@@ -11,7 +11,7 @@ def article_no_list(url_stem, params, html2no_list):
     resp = requests.get(url_stem, params)
     resp.raise_for_status() 
     soup = BeautifulSoup(resp.text, 'html.parser')
-    #print('wtf:',resp.url)
+    #print('???:',resp.url)
     return html2no_list(soup)
 
 def article_html_url(url_stem, params):
