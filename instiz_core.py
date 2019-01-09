@@ -45,12 +45,17 @@ html,url = article_html_url('name', 29866852)
 print(html, url)
 '''
 
-gen = \
-pipe(lambda html:html.find_all('div', class_='comment_line'),
-     cmap(lambda tag:tag.find('span')),
-     cfilter(lambda x:x is not None),
-     cmap(lambda span:span.text))
+#def comment_html2comment_list(comment_html):
+def view_comments(comment_html):
+    gen = \
+    pipe(lambda html:
+             html.find_all('div', class_='comment_line'),
+         cmap(lambda tag:tag.find('span')),
+         cfilter(lambda x:x is not None),
+         cmap(lambda span:span.text),
+         enumerate,
+         cmap(lambda s:'[%d] %s \n' % s))
+    print(*gen(comment_html))
 
 html = all_comments_html('name', 29866852)
-for i,x in enumerate(gen(html)):
-    print('[%d]' % i, x)
+view_comments(html)
