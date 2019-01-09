@@ -1,4 +1,4 @@
-xxx_core.py functions
+############ xxx_core.py functions #############
 
 article_no_list(board-info) => article-no-list
     게시판 정보를 받고 글 목록에서 글 번호의 목록을 반환
@@ -15,9 +15,10 @@ comment_pages(article-info) => all-comments
     instiz_core: (not this function)
        mlb_core: (not this function)
 
-mlb, instiz는 댓글을 받는 함수가 따로 작성됨.
+(*)mlb, instiz는 댓글을 받는 함수가 따로 작성됨.
 
 
-TODO
+##################### TODO #####################
 
 Refactor GET/POST comments functions in base.py
+If it would be really serious project, apply unit test.
