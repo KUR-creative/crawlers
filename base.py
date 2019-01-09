@@ -1,6 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 
+def is_empty(seq):
+    return (not seq)
+
+def is_not_empty(seq):
+    return not (not seq)
+
 def article_no_list(url_stem, params, html2no_list):
     resp = requests.get(url_stem, params)
     resp.raise_for_status() 
@@ -25,6 +31,26 @@ def post_comment_pages_seq(
         data[page_no_key] = str(cmt_page_no)
         resp = requests.post(url_stem, 
                              headers=headers, data=data)
+        resp.raise_for_status()
+        comment_page = response2page(resp)
+        if continue_condition(comment_page):
+            cmt_page_no += 1
+            yield page2yield(comment_page)
+        else:
+            break
+
+def get_comment_pages_seq(
+        url_stem, headers, params, page_no_key,
+        continue_condition, 
+        response2page = lambda resp:resp.text,
+        page2yield = lambda x:x,
+        init_page_no=1):
+    cmt_page_no = init_page_no
+    while True:
+        #print(cmt_page_no)
+        params[page_no_key] = str(cmt_page_no)
+        resp = requests.get(url_stem, 
+                            headers=headers, params=params)
         resp.raise_for_status()
         comment_page = response2page(resp)
         if continue_condition(comment_page):
