@@ -3,6 +3,8 @@ import base
 from fp import cmap, pipe, cfilter
 
 INSTIZ_LIST_STEM = 'https://www.instiz.net/bbs/list.php'
+def article_stem(board_name):
+    return 'https://www.instiz.net/%s' % str(board_name)
 
 def article_no_list(board_name, page_no, category):
     return base.article_no_list(
@@ -17,8 +19,13 @@ def article_no_list(board_name, page_no, category):
              #lambda x:x)
     )
 
+def article_html_url(board_name, article_no):
+    return base.article_html_url(
+        PPOM_ARTICLE_STEM, {'id':board_name, 'no':article_no}
+    )
+
 print(*article_no_list('fan', 1, 1), sep='\n')
-#print(article_no_list('fan', 1, 1)[0])
 print( len(article_no_list('fan', 1, 1)) )
 
+print(article_stem('free'))
 
