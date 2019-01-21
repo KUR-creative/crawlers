@@ -33,10 +33,10 @@ def comment_pages(article_html, article_url, gall_id, article_no):
     }
     data = {
         'comment_page':'1',
-        'id':'hit',
-        'no':'14949',
-        'cmt_id':'hit',
-        'cmt_no':'14949',
+        'id':str(gall_id),
+        'no':str(article_no),
+        'cmt_id':str(gall_id),
+        'cmt_no':str(article_no),
         'e_s_n_o':article_html.find('input',{'id':'e_s_n_o'})['value'],
         'sort':'D' # 등록순
     }
@@ -56,5 +56,9 @@ print(html, url)
 '''
 html,url = article_html_url('hit', 14933)
 cmt_dicts = comment_pages(html, url, 'hit', 14933)
+
+html,url = article_html_url('programming', 969366)
+cmt_dicts = comment_pages(html, url, 'programming', 969366)
 print(cmt_dicts)
 print(len(cmt_dicts))
+
