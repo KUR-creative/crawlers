@@ -45,6 +45,7 @@ def comment_pages(article_html, article_url, gall_id, article_no):
         'e_s_n_o':article_html.find('input',{'id':'e_s_n_o'})['value'],
         'sort':'D' # 등록순
     }
+    print(article_html.find('meta', {'property':'og:url'})['content'])
 
     try:
         return \
@@ -112,6 +113,12 @@ class test_comment_pages(unittest.TestCase):
         self.assertIsInstance(ret, list)
         self.assertEqual(len(ret),0)
 
+    def test_If_unmatched_article_no_then_Raise_value_error(self):
+        html,url = article_html_url('programming', 975800)
+        other_no = 968246
+        with self.assertRaises(ValueError):
+            comment_pages(html, url, 'programming', other_no)
+        
     #unmatched but existing article_no?
         #unmatched_article_no = 
 
