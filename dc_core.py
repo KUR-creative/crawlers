@@ -46,11 +46,14 @@ def comment_pages(article_html, article_url, gall_id, article_no):
         'sort':'D' # 등록순
     }
 
-    return list(base.post_comment_pages_seq(
-        DC_COMMENT_STEM, headers, data, 'comment_page',
-        lambda comment_dict:comment_dict['comments'])
-    )
-
+    try:
+        return \
+        list(base.post_comment_pages_seq(
+            DC_COMMENT_STEM, headers, data, 'comment_page',
+            lambda comment_dict:comment_dict['comments'])
+        )
+    except Exception as exception:
+        return exception.response
 
 '''
 article_no_li = article_no_list('programming', 1)
