@@ -74,9 +74,9 @@ print(len(cmt_dicts))
 '''
 
 import vcr
+import unittest
 my_vcr = vcr.VCR(path_transformer=vcr.VCR.ensure_suffix('.yml'),
                  cassette_library_dir='fixtures/cassettes')
-import unittest
 class test_article_html_url_core(unittest.TestCase):
     @my_vcr.use_cassette
     def test_If_404_then_Return_tuple_of_response_emptystr(self):
@@ -92,6 +92,13 @@ class test_article_html_url_core(unittest.TestCase):
         html,url = ret
         self.assertEqual(len(html), 112)
         self.assertEqual(url, 'http://gall.dcinside.com/board/view?id=programming&no=975800')
+
+class test_comment_pages(unittest.TestCase):
+    @my_vcr.use_cassette
+    def test_If_invalid_gall_id_then_Return_404_response(self):
+        html,url = article_html_url('programming',975800)
+        response = comment_pages(html, url, 'err_in_gall_id', 975800)
+        self.assertEqual(response.status_code, 404)
 
 if __name__ == '__main__':
     unittest.main()

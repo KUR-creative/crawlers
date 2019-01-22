@@ -55,9 +55,11 @@ def comment_pages(article_html, article_url,
 #print(len(article_no_list('humor', 1)))
 
 html,url = article_html_url('humor', 326422)
+html,url = article_html_url('humor', 306679)
 #print(html,url)
 
-print(len(comment_pages(PPOM_COMMENT_STEM, url, 'ppomppu', '306012')))
+#print(len(comment_pages(PPOM_COMMENT_STEM, url, 'ppomppu', '306012')))
 #expted 4
-print(len(comment_pages(PPOM_COMMENT_STEM, url, 'freeboard', 6229954)))
+#print(len(comment_pages(PPOM_COMMENT_STEM, url, 'freeboard', 6229954)))
 #expted 16
+print(html)
