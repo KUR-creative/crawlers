@@ -45,7 +45,11 @@ def comment_pages(article_html, article_url, gall_id, article_no):
         'e_s_n_o':article_html.find('input',{'id':'e_s_n_o'})['value'],
         'sort':'D' # 등록순
     }
-    print(article_html.find('meta', {'property':'og:url'})['content'])
+
+    if str(gall_id) not in article_url:
+        raise ValueError('gall_id must be matched with article_url')
+    if str(article_no) not in article_url:
+        raise ValueError('article_no must be matched with article_url')
 
     try:
         return \
@@ -98,6 +102,7 @@ class test_article_html_url_core(unittest.TestCase):
         self.assertEqual(url, 'http://gall.dcinside.com/board/view?id=programming&no=975800')
 
 class test_comment_pages(unittest.TestCase):
+    '''
     @my_vcr.use_cassette
     def test_If_invalid_gall_id_then_Return_404_response(self):
         html,url = article_html_url('programming', 975800)
@@ -113,11 +118,20 @@ class test_comment_pages(unittest.TestCase):
         self.assertIsInstance(ret, list)
         self.assertEqual(len(ret),0)
 
+    '''
+    @my_vcr.use_cassette
     def test_If_unmatched_article_no_then_Raise_value_error(self):
         html,url = article_html_url('programming', 975800)
         other_no = 968246
         with self.assertRaises(ValueError):
             comment_pages(html, url, 'programming', other_no)
+
+    @my_vcr.use_cassette
+    def test_If_unmatched_gall_id_then_Raise_value_error(self):
+        html,url = article_html_url('programming', 975800)
+        with self.assertRaises(ValueError):
+            response = comment_pages(
+                html, url, 'unmatched_gall_id', 975800)
         
     #unmatched but existing article_no?
         #unmatched_article_no = 
