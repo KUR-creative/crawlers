@@ -35,6 +35,7 @@ def post_comment_pages_seq(
         resp.raise_for_status()
         comment_page = response2page(resp)
         #print(comment_page)
+        #print(type(comment_page))
         if continue_condition(comment_page):
             cmt_page_no += 1
             yield page2yield(comment_page)
