@@ -102,23 +102,6 @@ class test_article_html_url_core(unittest.TestCase):
         self.assertEqual(url, 'http://gall.dcinside.com/board/view?id=programming&no=975800')
 
 class test_comment_pages(unittest.TestCase):
-    '''
-    @my_vcr.use_cassette
-    def test_If_invalid_gall_id_then_Return_404_response(self):
-        html,url = article_html_url('programming', 975800)
-        response = comment_pages(html, url, 'err_in_gall_id', 975800)
-        self.assertEqual(response.status_code, 404)
-
-    @my_vcr.use_cassette
-    def test_If_call_comments_of_deleted_article_no_then_Return_empty_list(self):
-        html,url = article_html_url('programming', 975800)
-        deleted_no = 975801
-        ret = comment_pages(html,url, 'programming',deleted_no)
-        
-        self.assertIsInstance(ret, list)
-        self.assertEqual(len(ret),0)
-
-    '''
     @my_vcr.use_cassette
     def test_If_unmatched_article_no_then_Raise_value_error(self):
         html,url = article_html_url('programming', 975800)
@@ -132,10 +115,6 @@ class test_comment_pages(unittest.TestCase):
         with self.assertRaises(ValueError):
             response = comment_pages(
                 html, url, 'unmatched_gall_id', 975800)
-        
-    #unmatched but existing article_no?
-        #unmatched_article_no = 
-
 
 
 if __name__ == '__main__':
