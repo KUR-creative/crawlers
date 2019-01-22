@@ -20,14 +20,14 @@ def article_no_list(gall_id, page_no):
     )
 
 def article_html_url(gall_id, article_no):
+    url = ''
     try:
         html,url = base.article_html_url(
             DC_ARTICLE_STEM, {'id':gall_id, 'no':article_no}
         )
-    except Exception as e:
-        html,url = 1,2
-    finally:
-        return html,url
+        #return html,url
+    except Exception as exception:
+        return exception.response,url
 
 def comment_pages(article_html, article_url, gall_id, article_no):
     # comment page type: json
@@ -79,11 +79,12 @@ my_vcr = vcr.VCR(path_transformer=vcr.VCR.ensure_suffix('.yml'),
 import unittest
 class test_article_html_url_core(unittest.TestCase):
     @my_vcr.use_cassette
-    def test_If_404_then_Return_tuple_of_exception_url(self):
+    def test_If_404_then_Return_tuple_of_response_emptystr(self):
         ret = article_html_url('programming',975801)
         self.assertIsInstance(ret,tuple)
-        exception,url = ret
-        self.assertEqual(exception.status_code, 404)
+        response,_ = ret
+        self.assertEqual(response.status_code, 404)
+
 
 if __name__ == '__main__':
     unittest.main()
