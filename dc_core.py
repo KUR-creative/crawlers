@@ -25,7 +25,7 @@ def article_html_url(gall_id, article_no):
         html,url = base.article_html_url(
             DC_ARTICLE_STEM, {'id':gall_id, 'no':article_no}
         )
-        #return html,url
+        return html,url
     except Exception as exception:
         return exception.response,url
 
@@ -85,6 +85,13 @@ class test_article_html_url_core(unittest.TestCase):
         response,_ = ret
         self.assertEqual(response.status_code, 404)
 
+    @my_vcr.use_cassette
+    def test_If_200_then_Return_tuple_of_html_url(self):
+        ret = article_html_url('programming',975800)
+        self.assertIsInstance(ret,tuple)
+        html,url = ret
+        self.assertEqual(len(html), 112)
+        self.assertEqual(url, 'http://gall.dcinside.com/board/view?id=programming&no=975800')
 
 if __name__ == '__main__':
     unittest.main()
