@@ -124,10 +124,8 @@ class test_comment_pages(unittest.TestCase):
         self.assertTrue(base.is_empty(cmt_dicts))
 
 
-
 if __name__ == '__main__':
+    for no in range(975799,975804):
+        print( base.is_bs4html(article_html_url('programming',no)[0]) )
     unittest.main()
-'''
-for no in range(975799,975804):
-    print( type(article_html_url('programming',no)) )
-'''
+

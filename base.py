@@ -1,9 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 
+def is_bs4html(obj):
+    return isinstance(obj, BeautifulSoup)
 def is_empty(seq):
     return (not seq)
-
 def is_not_empty(seq):
     return not (not seq)
 
