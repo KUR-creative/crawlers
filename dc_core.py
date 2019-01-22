@@ -123,9 +123,25 @@ class test_comment_pages(unittest.TestCase):
             html, url, 'programming', 973445)
         self.assertTrue(base.is_empty(cmt_dicts))
 
-
+from tqdm import tqdm
+import time
+import json
 if __name__ == '__main__':
-    for no in range(975799,975804):
-        print( base.is_bs4html(article_html_url('programming',no)[0]) )
+    start_time = time.time()
+    #for no in tqdm(range(802426,802526)):
+    for no in range(802426 ,963561):
+        html,url = article_html_url('programming',no)
+        #print( base.is_bs4html(article_html_url('programming',no)[0]) )
+        #print('->', base.is_bs4html(html))
+        cmt_dicts = []
+        if base.is_bs4html(html):
+            with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
+                f.write(str(html))
+            cmt_dicts = comment_pages(html,url,'programming',no)
+        if base.is_not_empty(cmt_dicts):
+            with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
+                json.dump(cmt_dicts, f)
+
+    print("--- %s seconds ---" % (time.time() - start_time))
     unittest.main()
 
