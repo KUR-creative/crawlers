@@ -116,6 +116,14 @@ class test_comment_pages(unittest.TestCase):
             response = comment_pages(
                 html, url, 'unmatched_gall_id', 975800)
 
+    @my_vcr.use_cassette
+    def test_If_no_comments_then_Return_empty_list(self):
+        html,url = article_html_url('programming', 973445)
+        cmt_dicts = comment_pages(
+            html, url, 'programming', 973445)
+        self.assertTrue(base.is_empty(cmt_dicts))
+
+
 
 if __name__ == '__main__':
     unittest.main()
