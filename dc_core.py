@@ -1,4 +1,5 @@
 ﻿#-*- coding: utf-8 -*-
+import pickle
 import base
 from fp import cmap, pipe, cfilter
 
@@ -46,6 +47,15 @@ def comment_pages(article_html, article_url, gall_id, article_no):
         'sort':'D' # 등록순
     }
 
+    def response2page(resp):
+        try:
+            return resp.json()
+        except:
+            with open(str(gall_id)+'_'+str(article_no)+'.problem') as f:
+                pickle.dump(resp,f)
+                print(type(resp))
+                print(resp.status_code)
+
     if str(gall_id) not in article_url:
         raise ValueError('gall_id must be matched with article_url')
     if str(article_no) not in article_url:
@@ -55,7 +65,8 @@ def comment_pages(article_html, article_url, gall_id, article_no):
         return \
         list(base.post_comment_pages_seq(
             DC_COMMENT_STEM, headers, data, 'comment_page',
-            lambda comment_dict:comment_dict['comments'])
+            lambda comment_dict:comment_dict['comments'],
+            )
         )
     except Exception as exception:
         return exception.response
@@ -127,23 +138,22 @@ from tqdm import tqdm
 import time
 import json
 if __name__ == '__main__':
-    begin_no = 826976
+    begin_no = 827237
     end_no = 963561
     start_time = time.time()
     #for no in tqdm(range(802426,802526)):
     for no in tqdm(range(begin_no ,end_no)):
-        with vcr.use_cassette('last_request.yml', record_mode='all'):
-            html,url = article_html_url('programming',no)
-            #print( base.is_bs4html(article_html_url('programming',no)[0]) )
-            #print('->', base.is_bs4html(html))
-            cmt_dicts = []
-            if base.is_bs4html(html):
-                with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
-                    f.write(str(html))
-                cmt_dicts = comment_pages(html,url,'programming',no)
-            if base.is_not_empty(cmt_dicts):
-                with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
-                    json.dump(cmt_dicts, f)
+        html,url = article_html_url('programming',no)
+        #print( base.is_bs4html(article_html_url('programming',no)[0]) )
+        #print('->', base.is_bs4html(html))
+        cmt_dicts = []
+        if base.is_bs4html(html):
+            with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
+                f.write(str(html))
+            cmt_dicts = comment_pages(html,url,'programming',no)
+        if base.is_not_empty(cmt_dicts):
+            with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
+                json.dump(cmt_dicts, f)
 
     print("--- %s seconds ---" % (time.time() - start_time))
     unittest.main()
