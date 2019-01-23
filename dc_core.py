@@ -127,7 +127,7 @@ from tqdm import tqdm
 import time
 import json
 if __name__ == '__main__':
-    begin_no = 802577
+    begin_no = 826976
     end_no = 963561
     start_time = time.time()
     #for no in tqdm(range(802426,802526)):
@@ -148,9 +148,9 @@ if __name__ == '__main__':
     print("--- %s seconds ---" % (time.time() - start_time))
     unittest.main()
 '''
-with vcr.use_cassette('name.yml'):
-    no = 802577
-    html,url = article_html_url('programming',no)
-    cmt_dicts = comment_pages(html,url,'programming',no)
+no = 826976
+html,url = article_html_url('programming',no)
+cmt_dicts = comment_pages(html,url,'programming',no)
+print(cmt_dicts)
 #'programming',
 '''
