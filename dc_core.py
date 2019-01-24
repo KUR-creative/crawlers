@@ -134,31 +134,41 @@ class test_comment_pages(unittest.TestCase):
             html, url, 'programming', 973445)
         self.assertTrue(base.is_empty(cmt_dicts))
 
+#------------ logger ------------
+import traceback
+from datetime import datetime
 from tqdm import tqdm
 import time
 import json
 if __name__ == '__main__':
-    begin_no = 827237
+    begin_no = 924873
     end_no = 963561
     start_time = time.time()
     #for no in tqdm(range(802426,802526)):
+    log_name = datetime.now().strftime('%Y-%m-%d %H_%M_%S')+'.log'
     for no in tqdm(range(begin_no ,end_no)):
-        html,url = article_html_url('programming',no)
-        #print( base.is_bs4html(article_html_url('programming',no)[0]) )
-        #print('->', base.is_bs4html(html))
-        cmt_dicts = []
-        if base.is_bs4html(html):
-            with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
-                f.write(str(html))
-            cmt_dicts = comment_pages(html,url,'programming',no)
-        if base.is_not_empty(cmt_dicts):
-            with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
-                json.dump(cmt_dicts, f)
+        with open(log_name,'a') as log:
+            try:
+                html,url = article_html_url('programming',no)
+                #print( base.is_bs4html(article_html_url('programming',no)[0]) )
+                #print('->', base.is_bs4html(html))
+                cmt_dicts = []
+                if base.is_bs4html(html):
+                    with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
+                        f.write(str(html))
+                    cmt_dicts = comment_pages(html,url,'programming',no)
+                if base.is_not_empty(cmt_dicts):
+                    with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
+                        json.dump(cmt_dicts, f)
+            except Exception as err:
+                log.write('-------[%s,%d]-------' % ('programming',no))
+                traceback.print_tb(err.__traceback__)
+                traceback.print_tb(err.__traceback__,file=log)
 
     print("--- %s seconds ---" % (time.time() - start_time))
     unittest.main()
 '''
-no = 826976
+no = 924802#826976
 html,url = article_html_url('programming',no)
 cmt_dicts = comment_pages(html,url,'programming',no)
 print(cmt_dicts)
