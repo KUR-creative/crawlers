@@ -189,7 +189,6 @@ if __name__ == '__main__':
             gall_id= crawl_info['gall_id']
             beg_no = crawl_info['beg_no']
             end_no = crawl_info['end_no']
-            fail_nos = crawl_info['fail_nos']
     else:
         print(usage)
         sys.exit()
@@ -197,11 +196,14 @@ if __name__ == '__main__':
     now_no = crawl_info['now_no']
 
     log_name = gall_id + '.yml'
-    if brand_new and os.path.exists(log_name):
+    if brand_new and os.path.exists(log_name): 
         print('Crawling log [',log_name,'] is already exists! Deal with it...')
         sys.exit()
 
-    for i,no in tqdm(enumerate(range(crawl_info['now_no'], crawl_info['end_no']))):
+    # TODO: Optimize: use open & close per some turn.
+    # in except, save fail no just into memory(use local fail_nos)
+    # and about 1000 iter, save(close) log.
+    for no in tqdm(range(crawl_info['now_no'], crawl_info['end_no'])):
         with open(log_name,'w') as log:
             try:
                 html,url = article_html_url('programming',no)
@@ -216,6 +218,7 @@ if __name__ == '__main__':
                 now_no += 1
             except Exception as err:
                 #when error occur, save 'no'
+                crawl_info['fail_nos'].append(no)
             finally:
                 crawl_info['now_no'] = now_no
                 yaml.dump(crawl_info, log)
