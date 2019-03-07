@@ -183,7 +183,7 @@ if __name__ == '__main__':
         )
     elif len(sys.argv) == 1 + 1:
         brand_new = False
-        log_file = sys.argv[1] 
+        log_file = sys.argv[1] + '.yml'
         with open(log_file, 'r') as f:
             crawl_info = yaml.load(f)
             gall_id= crawl_info['gall_id']
