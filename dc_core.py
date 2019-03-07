@@ -153,8 +153,29 @@ import traceback
 from datetime import datetime
 from tqdm import tqdm
 import time
+import sys
 if __name__ == '__main__':
     #unittest.main()
+    usage =\
+    '''
+    Usage:
+        python dc_core.py gall_id begin_article_no end_article_no  # make gall_id.yml and crawl.
+        python dc_core.py gall_id.yml  # continue crawling
+    ex)
+        python dc_core.py programming 802496 963561
+        python dc_core.py programming.yml
+
+    if you have already "some_id.yml", then you can't create same "some_id.yml"
+    '''
+    if len(sys.argv) == 3 + 1:
+        gall_id = sys.argv[1]
+        beg_no  = int(sys.argv[2])
+        end_no  = int(sys.argv[3])
+    elif len(sys.argv) == 1 + 1:
+        log_file= sys.argv[1] 
+    else:
+        print(usage)
+        sys.exit()
     begin_no = 802496
     end_no   = 963561
     start_time = time.time()
