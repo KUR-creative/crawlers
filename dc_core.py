@@ -178,7 +178,8 @@ if __name__ == '__main__':
             gall_id = gall_id,
             beg_no = beg_no,
             now_no = beg_no,
-            end_no = end_no
+            end_no = end_no,
+            fail_nos = []
         )
     elif len(sys.argv) == 1 + 1:
         brand_new = False
@@ -188,6 +189,7 @@ if __name__ == '__main__':
             gall_id= crawl_info['gall_id']
             beg_no = crawl_info['beg_no']
             end_no = crawl_info['end_no']
+            fail_nos = crawl_info['fail_nos']
     else:
         print(usage)
         sys.exit()
@@ -199,12 +201,10 @@ if __name__ == '__main__':
         print('Crawling log [',log_name,'] is already exists! Deal with it...')
         sys.exit()
 
-    with open(log_name,'w') as log: # brand new case
-        try:
-            for no in tqdm(range(crawl_info['now_no'], crawl_info['end_no'])):
+    for i,no in tqdm(enumerate(range(crawl_info['now_no'], crawl_info['end_no']))):
+        with open(log_name,'w') as log:
+            try:
                 html,url = article_html_url('programming',no)
-                #print( base.is_bs4html(article_html_url('programming',no)[0]) )
-                #print('->', base.is_bs4html(html))
                 cmt_dicts = []
                 if base.is_bs4html(html):
                     with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
@@ -214,18 +214,26 @@ if __name__ == '__main__':
                     with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
                         json.dump(cmt_dicts, f)
                 now_no += 1
+            except Exception as err:
+                #when error occur, save 'no'
+            finally:
+                crawl_info['now_no'] = now_no
+                yaml.dump(crawl_info, log)
+        
 
-        except Exception as err:
-            #log.write('-------[%s,%d]-------' % (gall_id,no))
-            print(gall_id,no,'\n',err)
-            #traceback.print_tb(err.__traceback__)
-            #traceback.print_tb(err.__traceback__,file=log)
-
-        finally:
-            crawl_info['now_no'] = now_no
-            yaml.dump(crawl_info, log)
-            print(log_name, 'saved successfully!')
             '''
+            except Exception as err:
+                print(gall_id,no,'\n',err)
+                #traceback.print_tb(err.__traceback__)
+                #traceback.print_tb(err.__traceback__,file=log)
+
+            finally:
+                #if i % 10 == 0:
+                crawl_info['now_no'] = now_no
+                yaml.dump(crawl_info, log)
+                print(log_name, 'saved successfully!')
+
+            #####
             try:
                 html,url = article_html_url('programming',no)
                 #print( base.is_bs4html(article_html_url('programming',no)[0]) )
