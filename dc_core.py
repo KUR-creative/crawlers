@@ -182,14 +182,17 @@ if __name__ == '__main__':
         )
     elif len(sys.argv) == 1 + 1:
         brand_new = False
-        log_file= sys.argv[1] 
-        gall_id = 'tmp'
-        beg_no = 2
-        end_no = 30
+        log_file = sys.argv[1] 
+        with open(log_file, 'r') as f:
+            crawl_info = yaml.load(f)
+            gall_id= crawl_info['gall_id']
+            beg_no = crawl_info['beg_no']
+            end_no = crawl_info['end_no']
     else:
         print(usage)
         sys.exit()
     
+    now_no = crawl_info['now_no']
     #now_no = beg_no if brand_new else 4
     #print(now_no)
 
@@ -203,7 +206,6 @@ if __name__ == '__main__':
         sys.exit()
     with open(log_name,'w') as log: # brand new case
         try:
-            now_no = crawl_info['now_no']
             for no in tqdm(range(crawl_info['now_no'], crawl_info['end_no'])):
                 time.sleep(1)
                 '''
@@ -223,8 +225,8 @@ if __name__ == '__main__':
         except Exception as err:
             #log.write('-------[%s,%d]-------' % (gall_id,no))
             print(err)
-            traceback.print_tb(err.__traceback__)
-            traceback.print_tb(err.__traceback__,file=log)
+            #traceback.print_tb(err.__traceback__)
+            #traceback.print_tb(err.__traceback__,file=log)
 
         finally:
             crawl_info['now_no'] = now_no
