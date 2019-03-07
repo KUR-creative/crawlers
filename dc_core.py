@@ -193,22 +193,15 @@ if __name__ == '__main__':
         sys.exit()
     
     now_no = crawl_info['now_no']
-    #now_no = beg_no if brand_new else 4
-    #print(now_no)
 
-    #begin_no = 802496
-    #end_no   = 963561
-    start_time = time.time()
-    #for no in tqdm(range(802426,802526)):
     log_name = gall_id + '.yml'
     if brand_new and os.path.exists(log_name):
         print('Crawling log [',log_name,'] is already exists! Deal with it...')
         sys.exit()
+
     with open(log_name,'w') as log: # brand new case
         try:
             for no in tqdm(range(crawl_info['now_no'], crawl_info['end_no'])):
-                time.sleep(1)
-                '''
                 html,url = article_html_url('programming',no)
                 #print( base.is_bs4html(article_html_url('programming',no)[0]) )
                 #print('->', base.is_bs4html(html))
@@ -220,11 +213,11 @@ if __name__ == '__main__':
                 if base.is_not_empty(cmt_dicts):
                     with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
                         json.dump(cmt_dicts, f)
-                '''
                 now_no += 1
+
         except Exception as err:
             #log.write('-------[%s,%d]-------' % (gall_id,no))
-            print(err)
+            print(gall_id,no,'\n',err)
             #traceback.print_tb(err.__traceback__)
             #traceback.print_tb(err.__traceback__,file=log)
 
@@ -250,8 +243,6 @@ if __name__ == '__main__':
                 traceback.print_tb(err.__traceback__)
                 traceback.print_tb(err.__traceback__,file=log)
             '''
-
-    print("--- %s seconds ---" % (time.time() - start_time))
     
 '''
 no = 924802#826976
