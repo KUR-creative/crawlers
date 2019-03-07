@@ -2,6 +2,7 @@
 import pickle
 import base
 import json
+import os
 from fp import cmap, pipe, cfilter
 
 # stem: url without query
@@ -168,27 +169,33 @@ if __name__ == '__main__':
     if you have already "some_id.yml", then you can't create same "some_id.yml"
     '''
     if len(sys.argv) == 3 + 1:
-        brand_new = False
+        brand_new = True
         gall_id = sys.argv[1]
         beg_no  = int(sys.argv[2])
         end_no  = int(sys.argv[3])
     elif len(sys.argv) == 1 + 1:
-        brand_new = True
+        brand_new = False
         log_file= sys.argv[1] 
+        gall_id = 'tmp'
+        beg_no = 2
+        end_no = 30
     else:
         print(usage)
         sys.exit()
     
-    now_no = beg_no if brand_new else 1
+    now_no = beg_no if brand_new else 4
     print(now_no)
 
-    begin_no = 802496
-    end_no   = 963561
+    #begin_no = 802496
+    #end_no   = 963561
     start_time = time.time()
     #for no in tqdm(range(802426,802526)):
-    log_name = datetime.now().strftime('%Y-%m-%d %H_%M_%S')+'.log'
-    for no in tqdm(range(begin_no ,end_no)):
-        with open(log_name,'a') as log:
+    log_name = gall_id + '.yml'
+    if brand_new and os.path.exists(log_name):
+        print('Crawling log [',log_name, '] is already exists! Deal with it...')
+        sys.exit()
+    for no in tqdm(range(now_no, end_no)):
+        with open(log_name,'w') as log: # brand new case
             html,url = article_html_url('programming',no)
             #print( base.is_bs4html(article_html_url('programming',no)[0]) )
             #print('->', base.is_bs4html(html))
