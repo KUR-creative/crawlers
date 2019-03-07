@@ -168,14 +168,20 @@ if __name__ == '__main__':
     if you have already "some_id.yml", then you can't create same "some_id.yml"
     '''
     if len(sys.argv) == 3 + 1:
+        brand_new = False
         gall_id = sys.argv[1]
         beg_no  = int(sys.argv[2])
         end_no  = int(sys.argv[3])
     elif len(sys.argv) == 1 + 1:
+        brand_new = True
         log_file= sys.argv[1] 
     else:
         print(usage)
         sys.exit()
+    
+    now_no = beg_no if brand_new else 1
+    print(now_no)
+
     begin_no = 802496
     end_no   = 963561
     start_time = time.time()
