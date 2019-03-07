@@ -33,6 +33,7 @@ def post_comment_pages_seq(
         resp = requests.post(url_stem, 
                              headers=headers, data=data)
         resp.raise_for_status()
+        #print(resp.content)
         comment_page = response2page(resp)
         #print(comment_page)
         #print(type(comment_page))

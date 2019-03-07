@@ -1,6 +1,7 @@
 ﻿#-*- coding: utf-8 -*-
 import pickle
 import base
+import json
 from fp import cmap, pipe, cfilter
 
 # stem: url without query
@@ -47,6 +48,7 @@ def comment_pages(article_html, article_url, gall_id, article_no):
         'sort':'D' # 등록순
     }
 
+    ''' 
     def response2page(resp):
         try:
             return resp.json()
@@ -55,20 +57,32 @@ def comment_pages(article_html, article_url, gall_id, article_no):
                 pickle.dump(resp,f)
                 print(type(resp))
                 print(resp.status_code)
+    '''
 
     if str(gall_id) not in article_url:
         raise ValueError('gall_id must be matched with article_url')
     if str(article_no) not in article_url:
         raise ValueError('article_no must be matched with article_url')
 
+    def resp2page(resp):
+        tagged_json = resp.content
+        # split headed <script> tag and join rest
+        only_json = b'{' + tagged_json.split(b'{',maxsplit=1)[1]
+        return json.loads(only_json.decode('utf-8'))
     try:
         return \
         list(base.post_comment_pages_seq(
             DC_COMMENT_STEM, headers, data, 'comment_page',
             lambda comment_dict:comment_dict['comments'],
+            response2page=resp2page
             )
         )
     except Exception as exception:
+        print(exception)
+        print(exception.doc)
+        print(exception.pos)
+        print(exception.lineno)
+        print(exception.msg)
         return exception.response
 
 '''
@@ -139,15 +153,27 @@ import traceback
 from datetime import datetime
 from tqdm import tqdm
 import time
-import json
 if __name__ == '__main__':
-    begin_no = 924873
-    end_no = 963561
+    #unittest.main()
+    begin_no = 802496
+    end_no   = 963561
     start_time = time.time()
     #for no in tqdm(range(802426,802526)):
     log_name = datetime.now().strftime('%Y-%m-%d %H_%M_%S')+'.log'
     for no in tqdm(range(begin_no ,end_no)):
         with open(log_name,'a') as log:
+            html,url = article_html_url('programming',no)
+            #print( base.is_bs4html(article_html_url('programming',no)[0]) )
+            #print('->', base.is_bs4html(html))
+            cmt_dicts = []
+            if base.is_bs4html(html):
+                with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
+                    f.write(str(html))
+                cmt_dicts = comment_pages(html,url,'programming',no)
+            if base.is_not_empty(cmt_dicts):
+                with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
+                    json.dump(cmt_dicts, f)
+            '''
             try:
                 html,url = article_html_url('programming',no)
                 #print( base.is_bs4html(article_html_url('programming',no)[0]) )
@@ -164,9 +190,10 @@ if __name__ == '__main__':
                 log.write('-------[%s,%d]-------' % ('programming',no))
                 traceback.print_tb(err.__traceback__)
                 traceback.print_tb(err.__traceback__,file=log)
+            '''
 
     print("--- %s seconds ---" % (time.time() - start_time))
-    unittest.main()
+    
 '''
 no = 924802#826976
 html,url = article_html_url('programming',no)
