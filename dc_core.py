@@ -155,6 +155,7 @@ from datetime import datetime
 from tqdm import tqdm
 import time
 import sys
+import yaml
 if __name__ == '__main__':
     #unittest.main()
     usage =\
@@ -173,6 +174,12 @@ if __name__ == '__main__':
         gall_id = sys.argv[1]
         beg_no  = int(sys.argv[2])
         end_no  = int(sys.argv[3])
+        crawl_info = dict(
+            gall_id = gall_id,
+            beg_no = beg_no,
+            now_no = beg_no,
+            end_no = end_no
+        )
     elif len(sys.argv) == 1 + 1:
         brand_new = False
         log_file= sys.argv[1] 
@@ -183,8 +190,8 @@ if __name__ == '__main__':
         print(usage)
         sys.exit()
     
-    now_no = beg_no if brand_new else 4
-    print(now_no)
+    #now_no = beg_no if brand_new else 4
+    #print(now_no)
 
     #begin_no = 802496
     #end_no   = 963561
@@ -192,21 +199,37 @@ if __name__ == '__main__':
     #for no in tqdm(range(802426,802526)):
     log_name = gall_id + '.yml'
     if brand_new and os.path.exists(log_name):
-        print('Crawling log [',log_name, '] is already exists! Deal with it...')
+        print('Crawling log [',log_name,'] is already exists! Deal with it...')
         sys.exit()
-    for no in tqdm(range(now_no, end_no)):
-        with open(log_name,'w') as log: # brand new case
-            html,url = article_html_url('programming',no)
-            #print( base.is_bs4html(article_html_url('programming',no)[0]) )
-            #print('->', base.is_bs4html(html))
-            cmt_dicts = []
-            if base.is_bs4html(html):
-                with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
-                    f.write(str(html))
-                cmt_dicts = comment_pages(html,url,'programming',no)
-            if base.is_not_empty(cmt_dicts):
-                with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
-                    json.dump(cmt_dicts, f)
+    with open(log_name,'w') as log: # brand new case
+        try:
+            now_no = crawl_info['now_no']
+            for no in tqdm(range(crawl_info['now_no'], crawl_info['end_no'])):
+                time.sleep(1)
+                '''
+                html,url = article_html_url('programming',no)
+                #print( base.is_bs4html(article_html_url('programming',no)[0]) )
+                #print('->', base.is_bs4html(html))
+                cmt_dicts = []
+                if base.is_bs4html(html):
+                    with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
+                        f.write(str(html))
+                    cmt_dicts = comment_pages(html,url,'programming',no)
+                if base.is_not_empty(cmt_dicts):
+                    with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
+                        json.dump(cmt_dicts, f)
+                '''
+                now_no += 1
+        except Exception as err:
+            #log.write('-------[%s,%d]-------' % (gall_id,no))
+            print(err)
+            traceback.print_tb(err.__traceback__)
+            traceback.print_tb(err.__traceback__,file=log)
+
+        finally:
+            crawl_info['now_no'] = now_no
+            yaml.dump(crawl_info, log)
+            print(log_name, 'saved successfully!')
             '''
             try:
                 html,url = article_html_url('programming',no)
