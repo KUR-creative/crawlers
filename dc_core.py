@@ -206,14 +206,14 @@ if __name__ == '__main__':
     for no in tqdm(range(crawl_info['now_no'], crawl_info['end_no'])):
         with open(log_name,'w') as log:
             try:
-                html,url = article_html_url('programming',no)
+                html,url = article_html_url(gall_id,no)
                 cmt_dicts = []
                 if base.is_bs4html(html):
-                    with open('pages/%s_%d.html' % ('programming',no), 'w', encoding='utf8') as f:
+                    with open('pages/%s_%d.html' % (gall_id,no), 'w', encoding='utf8') as f:
                         f.write(str(html))
-                    cmt_dicts = comment_pages(html,url,'programming',no)
+                    cmt_dicts = comment_pages(html,url,gall_id,no)
                 if base.is_not_empty(cmt_dicts):
-                    with open('comments/%s_%d.json' % ('programming',no), 'w', encoding='utf8') as f:
+                    with open('comments/%s_%d.json' % (gall_id,no), 'w', encoding='utf8') as f:
                         json.dump(cmt_dicts, f)
                 now_no += 1
             except Exception as err:
