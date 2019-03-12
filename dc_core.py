@@ -74,7 +74,7 @@ def comment_pages(article_html, article_url, gall_id, article_no):
         return \
         list(base.post_comment_pages_seq(
             DC_COMMENT_STEM, headers, data, 'comment_page',
-            lambda comment_dict:comment_dict['comments'],
+            lambda comment_dict:comment_dict['comments'] is not None,
             response2page=resp2page
             )
         )

@@ -25,13 +25,16 @@ def post_comment_pages_seq(
         continue_condition, 
         response2page = lambda resp:resp.json(),
         page2yield = lambda x:x,
-        init_page_no=1):
+        init_page_no=1,
+        timeout=5):
     cmt_page_no = init_page_no
     while True:
+        #print('post_comment_page :', cmt_page_no) 
         #print(cmt_page_no)
         data[page_no_key] = str(cmt_page_no)
-        resp = requests.post(url_stem, 
-                             headers=headers, data=data)
+        resp = requests.post(
+            url_stem, headers=headers, data=data, timeout=timeout
+        )
         resp.raise_for_status()
         #print(resp.content)
         comment_page = response2page(resp)
