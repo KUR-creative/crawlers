@@ -218,6 +218,7 @@ if __name__ == '__main__':
                 now_no += 1
             except Exception as err:
                 #when error occur, save 'no'
+                print('error page_no:',no,' error:',err)
                 crawl_info['fail_nos'].append(no)
             finally:
                 crawl_info['now_no'] = now_no
